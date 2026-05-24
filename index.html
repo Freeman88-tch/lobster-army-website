@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>龙虾兵团 · AI自动化工具箱</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 导航 -->
+    <nav class="navbar">
+        <div class="container nav-inner">
+            <a href="#" class="logo">🦞 龙虾兵团</a>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#skills">技能广场</a></li>
+                <li><a href="#download">免费下载</a></li>
+                <li><a href="#pricing">套餐</a></li>
+                <li><a href="#knowledge">知识库</a></li>
+                <li><a href="#contact" class="btn-nav">注册/登录</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 首页英雄区 -->
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>不会编程？<br><span class="highlight">3分钟拥有全套AI自动化</span></h1>
+                <p class="hero-sub">从口播视频到外汇交易，从内容生成到自动建站 — 插上U盘就能用</p>
+                <div class="hero-buttons">
+                    <a href="#download" class="btn btn-primary">🆓 免费下载工具包</a>
+                    <a href="#skills" class="btn btn-secondary">👀 查看技能</a>
+                </div>
+                <div class="hero-stats">
+                    <div><strong>220+</strong><span>实战技能</span></div>
+                    <div><strong>12</strong><span>作战部门</span></div>
+                    <div><strong>197</strong><span>专业虾兵</span></div>
+                    <div><strong>0</strong><span>编程门槛</span></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 技能广场 -->
+    <section id="skills" class="section">
+        <div class="container">
+            <h2 class="section-title">🛠️ 技能广场</h2>
+            <p class="section-desc">AI自动化全栈能力，即插即用</p>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">🎬</div>
+                    <h3>口播视频自动生成</h3>
+                    <p>输入文案，自动合成口播视频，支持数字人+字幕+背景音乐</p>
+                    <span class="skill-tag">热门</span>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">📊</div>
+                    <h3>外汇交易EA</h3>
+                    <p>七窍玲珑战法v4.0，三重共振打分系统，以损定量自动化交易</p>
+                    <span class="skill-tag">专业</span>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🤖</div>
+                    <h3>AI内容生成</h3>
+                    <p>文案/脚本/软文/种草笔记，全自动去AI化输出</p>
+                    <span class="skill-tag">热门</span>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🛠️</div>
+                    <h3>桌面自动化</h3>
+                    <p>看得见屏幕就能操控电脑，自动填表/批量处理/网页操作</p>
+                    <span class="skill-tag">黑科技</span>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🎨</div>
+                    <h3>AI图像视频</h3>
+                    <p>一句话出视频、图像生成、数字人克隆、多语言配音</p>
+                    <span class="skill-tag">新</span>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🌐</div>
+                    <h3>零成本自动建站</h3>
+                    <p>不用服务器不用域名，3步上线网站，带扫码收款</p>
+                    <span class="skill-tag">实战</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 下载中心 -->
+    <section id="download" class="section bg-alt">
+        <div class="container">
+            <h2 class="section-title">📦 免费下载中心</h2>
+            <p class="section-desc">注册会员即可下载全部工具包</p>
+            <div class="download-grid">
+                <div class="download-card">
+                    <h3>🦞 小龙虾一键安装包</h3>
+                    <p>Windows即插即用版，解压即运行。包含全部AI自动化工具</p>
+                    <div class="download-meta">更新：2026-05 | 大小：2.1GB</div>
+                    <button class="btn btn-primary download-btn" onclick="showRegister()">注册下载</button>
+                </div>
+                <div class="download-card">
+                    <h3>🎬 AI口播视频模板</h3>
+                    <p>oc-video-template，改文案就能产出专业口播视频</p>
+                    <div class="download-meta">更新：2026-05 | 大小：1.8MB</div>
+                    <button class="btn btn-primary download-btn" onclick="showRegister()">注册下载</button>
+                </div>
+                <div class="download-card">
+                    <h3>📘 七窍玲珑战法PDF</h3>
+                    <p>完整版交易策略：三重共振+以损定量+九维评分</p>
+                    <div class="download-meta">更新：2026-05 | 大小：2.3MB</div>
+                    <button class="btn btn-primary download-btn" onclick="showRegister()">注册下载</button>
+                </div>
+                <div class="download-card">
+                    <h3>🌐 零成本建站模板</h3>
+                    <p>纯静态网站模板，部署Cloudflare Pages即上线</p>
+                    <div class="download-meta">更新：2026-05 | 大小：2KB</div>
+                    <button class="btn btn-primary download-btn" onclick="showRegister()">注册下载</button>
+                </div>
+                <div class="download-card">
+                    <h3>📖 自动安装教程</h3>
+                    <p>图文+视频教程，从零开始配置你的AI工作台</p>
+                    <div class="download-meta">更新：2026-05 | 大小：156MB</div>
+                    <button class="btn btn-primary download-btn" onclick="showRegister()">注册下载</button>
+                </div>
+                <div class="download-card">
+                    <h3>🔧 EA交易网关</h3>
+                    <p>MT4远程交易网关，手机控制外汇交易</p>
+                    <div class="download-meta">更新：2026-05 | 大小：8.6MB</div>
+                    <button class="btn btn-primary download-btn" onclick="showRegister()">注册下载</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 注册弹窗 -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal">
+            <button class="modal-close" onclick="hideRegister()">✕</button>
+            <h2>注册会员 · 免费下载</h2>
+            <p>填写信息后自动获取下载链接</p>
+            <form id="registerForm">
+                <input type="text" placeholder="你的名字" required>
+                <input type="email" placeholder="邮箱地址（接收下载链接）" required>
+                <select required>
+                    <option value="">你主要想做什么？</option>
+                    <option>短视频/口播</option>
+                    <option>外汇交易</option>
+                    <option>AI内容创作</option>
+                    <option>自动化办公</option>
+                    <option>接单赚钱</option>
+                </select>
+                <button type="submit" class="btn btn-primary" style="width:100%">✅ 立即注册并下载</button>
+            </form>
+            <p class="form-tip">📧 下载链接将发送到你的邮箱</p>
+        </div>
+    </div>
+
+    <!-- 套餐商城 -->
+    <section id="pricing" class="section">
+        <div class="container">
+            <h2 class="section-title">💎 U盘套餐</h2>
+            <p class="section-desc">插上U盘，即刻拥有全套AI自动化能力</p>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>标准版</h3>
+                    <div class="price">¥199</div>
+                    <div class="price-tip">约$29</div>
+                    <ul>
+                        <li>✅ 口播视频工具</li>
+                        <li>✅ 安装教程+PDF</li>
+                        <li>✅ AI内容生成</li>
+                        <li>✅ 零成本建站模板</li>
+                        <li>✅ 7天在线支持</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="showBuy('标准版','199')">立即购买</button>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="badge">🔥 最受欢迎</div>
+                    <h3>专业版</h3>
+                    <div class="price">¥399</div>
+                    <div class="price-tip">约$59</div>
+                    <ul>
+                        <li>✅ 全部标准版内容</li>
+                        <li>✅ 七窍玲珑交易EA</li>
+                        <li>✅ 桌面自动化工具</li>
+                        <li>✅ 数字人口播模板</li>
+                        <li>✅ AI图像视频工具</li>
+                        <li>✅ 30天在线支持</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="showBuy('专业版','399')">立即购买</button>
+                </div>
+                <div class="pricing-card">
+                    <h3>旗舰版</h3>
+                    <div class="price">¥699</div>
+                    <div class="price-tip">约$99</div>
+                    <ul>
+                        <li>✅ 全部专业版内容</li>
+                        <li>✅ 一对一技术指导</li>
+                        <li>✅ 企业级自动化方案</li>
+                        <li>✅ 全年免费更新</li>
+                        <li>✅ 终身在线支持</li>
+                        <li>✅ 私人定制技能</li>
+                    </ul>
+                    <button class="btn btn-primary" onclick="showBuy('旗舰版','699')">立即购买</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 购买弹窗 -->
+    <div class="modal-overlay" id="buyModal">
+        <div class="modal">
+            <button class="modal-close" onclick="hideBuy()">✕</button>
+            <h2 id="buyTitle">购买套餐</h2>
+            <p>扫码支付后自动发货</p>
+            <div class="pay-section">
+                <div class="pay-method">
+                    <h4>💳 支付宝</h4>
+                    <div class="qrcode-placeholder">[支付宝收款码]</div>
+                    <p class="pay-note">扫码支付后截图发给客服</p>
+                </div>
+                <div class="pay-method">
+                    <h4>💚 微信支付</h4>
+                    <div class="qrcode-placeholder">[微信收款码]</div>
+                    <p class="pay-note">扫码支付后截图发给客服</p>
+                </div>
+            </div>
+            <div class="pay-amount" id="payAmount"></div>
+            <p class="pay-tip">📦 支付后联系客服获取下载链接</p>
+        </div>
+    </div>
+
+    <!-- AI知识库 -->
+    <section id="knowledge" class="section bg-alt">
+        <div class="container">
+            <h2 class="section-title">📚 AI知识库</h2>
+            <p class="section-desc">实战教程·行业案例·落地指南</p>
+            <div class="knowledge-grid">
+                <a href="#" class="knowledge-card">
+                    <span class="k-tag">教程</span>
+                    <h3>从0开始做AI口播视频</h3>
+                    <p>不需要任何专业技能，3步产出第一条口播视频</p>
+                    <span class="k-date">2026-05-20</span>
+                </a>
+                <a href="#" class="knowledge-card">
+                    <span class="k-tag" style="background:#ff6b6b">交易</span>
+                    <h3>七窍玲珑战法入门</h3>
+                    <p>三重共振+以损定量，散户也能用的专业交易系统</p>
+                    <span class="k-date">2026-05-18</span>
+                </a>
+                <a href="#" class="knowledge-card">
+                    <span class="k-tag" style="background:#51cf66">变现</span>
+                    <h3>零成本AI接单全流程</h3>
+                    <p>用AI工具接Bounty任务，单日收入$1,200实战复盘</p>
+                    <span class="k-date">2026-05-22</span>
+                </a>
+                <a href="#" class="knowledge-card">
+                    <span class="k-tag" style="background:#845ef7">建站</span>
+                    <h3>3步上线你的第一个网站</h3>
+                    <p>Cloudflare Pages免费部署+域名绑定+收款接入</p>
+                    <span class="k-date">2026-05-21</span>
+                </a>
+                <a href="#" class="knowledge-card">
+                    <span class="k-tag" style="background:#ffd43b">工具</span>
+                    <h3>2026年必备AI工具清单</h3>
+                    <p>50+免费AI工具分类整理，提升10倍工作效率</p>
+                    <span class="k-date">2026-05-15</span>
+                </a>
+                <a href="#" class="knowledge-card">
+                    <span class="k-tag" style="background:#20c997">案例</span>
+                    <h3>AI自动化从0到$700</h3>
+                    <p>一个月从0收入到日赚$700的真实执行路线</p>
+                    <span class="k-date">2026-05-12</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系/需求提交 -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">📞 联系我们</h2>
+            <p class="section-desc">需求提交·技术咨询·企业合作</p>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>联系方式</h3>
+                    <p>📧 邮箱：contact@lobster-army.com</p>
+                    <p>💬 微信：lobster-army</p>
+                    <p>🕐 回复时间：24小时内</p>
+                    <div class="contact-features">
+                        <div>✅ 技术问题1对1解答</div>
+                        <div>✅ 企业自动化方案定制</div>
+                        <div>✅ 批量U盘采购优惠</div>
+                        <div>✅ 技能定制开发</div>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <h3>提交需求</h3>
+                    <input type="text" placeholder="你的名字" required>
+                    <input type="text" placeholder="微信/手机号" required>
+                    <select>
+                        <option>我需要什么帮助？</option>
+                        <option>购买U盘套餐</option>
+                        <option>技能定制</option>
+                        <option>企业自动化方案</option>
+                        <option>技术咨询</option>
+                        <option>其他</option>
+                    </select>
+                    <textarea rows="4" placeholder="详细描述你的需求..."></textarea>
+                    <button type="submit" class="btn btn-primary" style="width:100%">📨 提交需求</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-col">
+                <h4>🦞 龙虾兵团</h4>
+                <p>AI自动化实战团队<br>12大部门 · 220+技能 · 只做落地</p>
+            </div>
+            <div class="footer-col">
+                <h4>快速链接</h4>
+                <a href="#skills">技能广场</a>
+                <a href="#download">免费下载</a>
+                <a href="#pricing">套餐</a>
+                <a href="#knowledge">知识库</a>
+            </div>
+            <div class="footer-col">
+                <h4>合作</h4>
+                <a href="#">技能分销</a>
+                <a href="#">企业合作</a>
+                <a href="#">成为代理</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 龙虾兵团 · All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
