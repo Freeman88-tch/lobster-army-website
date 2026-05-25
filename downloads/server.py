@@ -14,6 +14,7 @@ import tempfile
 from flask import Flask, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
 from PIL import Image, ImageDraw, ImageFont
+import requests
 
 app = Flask(__name__, static_folder="static", static_url_path="")
 CORS(app)
@@ -287,16 +288,8 @@ def analyze_photo():
         with open(img_path, "wb") as f:
             f.write(image_data)
         
-        img = Image.open(img_path)
-        w, h = img.size
-        
-        analysis = (
-            f"✅ 照片已接收！\n"
-            f"📐 尺寸: {w}×{h}\n"
-            f"📦 大小: {len(image_data)/1024:.0f}KB\n\n"
-            f"💡 建议：正面照、光线充足、表情自然的效果最好。\n"
-            f"你的RTX 4060 Ti 16GB已经就绪，可以开始生成视频了！"
-        )
+        # 调豆包API识别照片
+        analysis = call_doubao_vision(image_data)
         
         return jsonify({
             "success": True,
@@ -308,6 +301,54 @@ def analyze_photo():
         })
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
+
+# ========== 豆包API视觉识别 ==========
+DOUBAO_KEY = "ark-a9fabe47-c00b-46e7-909a-0fd9b2b47777-8f0e0"
+DOUBAO_MODEL = "ep-20260509014909-lvs7s"
+DOUBAO_API = "https://ark.cn-beijing.volces.com/api/v3/chat/completions"
+
+def call_doubao_vision(image_data):
+    """调豆包视觉API分析照片特征"""
+    import base64
+    b64 = base64.b64encode(image_data).decode()
+    
+    payload = {
+        "model": DOUBAO_MODEL,
+        "messages": [{
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "请分析这张照片中的人物特征，用中文简明回答（3-5句话）：\n1. 性别和大致年龄\n2. 面部朝向\n3. 表情状态\n4. 光线条件\n5. 是否适合做数字人口播？建议理由是什么？"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/png;base64,{b64}"}
+                }
+            ]
+        }],
+        "max_tokens": 500,
+        "temperature": 0.3
+    }
+    
+    try:
+        resp = requests.post(
+            DOUBAO_API,
+            headers={
+                "Authorization": f"Bearer {DOUBAO_KEY}",
+                "Content-Type": "application/json"
+            },
+            json=payload,
+            timeout=60
+        )
+        data = resp.json()
+        if "choices" in data and len(data["choices"]) > 0:
+            return data["choices"][0]["message"]["content"]
+        else:
+            error_msg = data.get("error", {}).get("message", "未知错误")
+            return f"⚠️ 豆包API调用失败: {error_msg}"
+    except Exception as e:
+        return f"⚠️ API请求失败: {str(e)}"
 
 # ========== API: 生成口播视频（使用实际照片+配音） ==========
 @app.route("/api/generate-video", methods=["POST", "OPTIONS"])
