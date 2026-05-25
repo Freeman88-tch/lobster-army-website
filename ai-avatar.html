@@ -205,7 +205,7 @@ genBtn.onclick = function(){
   st2.className='step-item active';
   
   var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'http://110.40.180.150:8081/ai-api/api/analyze-photo', true);
+  xhr.open('POST', 'http://192.168.1.7:5000/api/analyze-photo', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
   
   xhr.onload = function(){
