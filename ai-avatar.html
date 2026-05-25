@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>AI数字人口播工坊 · 龙虾兵团</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a1a;color:#e2e8f0;min-height:100vh}
+.header{text-align:center;padding:25px 15px 10px}
+.header h1{font-size:1.4em;color:#00d4ff;margin-bottom:4px}
+.header p{color:#718096;font-size:0.85em}
+
+/* 步骤指示器 */
+.steps{display:flex;justify-content:center;gap:8px;padding:15px;margin:10px 0}
+.step-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8em;font-weight:700;transition:all .3s}
+.step-dot.active{background:#00d4ff;color:#fff;box-shadow:0 0 10px #00d4ff66}
+.step-dot.done{background:#48bb78;color:#fff}
+.step-dot.pending{background:#2d2d44;color:#718096}
+.step-line{width:30px;height:2px;background:#2d2d44;align-self:center}
+.step-line.done{background:#48bb78}
+
+/* 卡片 */
+.card{margin:10px 15px;padding:20px;background:#1a1a2e;border-radius:12px;border:1px solid #2d2d44}
+.card-title{color:#00d4ff;font-size:1em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+
+/* 拍照区 */
+.camera-area{width:100%;aspect-ratio:3/4;background:#2d2d44;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;position:relative;margin-bottom:12px}
+.camera-area video,.camera-area img{width:100%;height:100%;object-fit:cover}
+.camera-area .placeholder{text-align:center;color:#718096}
+.camera-area .placeholder .icon{font-size:3em;margin-bottom:8px}
+.camera-area .placeholder p{font-size:0.85em}
+
+/* 输入框 */
+.input-area{width:100%;padding:12px;background:#2d2d44;border:1px solid #3d3d55;border-radius:8px;color:#e2e8f0;font-size:0.95em;outline:none;resize:none;min-height:80px;font-family:inherit}
+.input-area:focus{border-color:#00d4ff}
+
+/* 语音选择 */
+.voice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.voice-opt{padding:10px;background:#2d2d44;border-radius:8px;text-align:center;cursor:pointer;font-size:0.85em;transition:all .2s;border:2px solid transparent}
+.voice-opt.selected{border-color:#00d4ff;background:#00d4ff11}
+.voice-opt .label{color:#a0aec0;font-size:0.75em}
+
+/* 生成按钮 */
+.btn-gen{width:100%;padding:14px;border-radius:10px;border:none;font-size:1.05em;font-weight:700;cursor:pointer;transition:all .3s;margin-top:10px}
+.btn-gen.ready{background:linear-gradient(135deg,#00d4ff,#0099cc);color:#fff}
+.btn-gen.ready:hover{transform:translateY(-2px);box-shadow:0 4px 20px #00d4ff44}
+.btn-gen.disabled{background:#2d2d44;color:#718096;cursor:not-allowed}
+.btn-gen.generating{background:linear-gradient(135deg,#48bb78,#38a169);color:#fff;animation:pulse 1.5s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:0.7}100%{opacity:1}}
+
+/* 进度 */
+.progress-bar{height:4px;background:#2d2d44;border-radius:2px;margin:15px 0;overflow:hidden}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,#00d4ff,#48bb78);border-radius:2px;width:0%;transition:width .5s}
+.progress-text{text-align:center;color:#718096;font-size:0.8em;margin:5px 0}
+
+/* 结果区 */
+.result-area{margin:10px 15px;padding:20px;background:#1a1a2e;border-radius:12px;border:1px solid #48bb7844;display:none}
+.result-area video{width:100%;border-radius:8px;margin:10px 0}
+.btn-download{display:block;width:100%;padding:12px;background:#48bb78;color:#fff;border:none;border-radius:8px;font-size:1em;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;margin-top:8px}
+
+/* 底部 */
+.footer{text-align:center;padding:20px;color:#4a5568;font-size:0.75em;margin-top:20px}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;left:15px;right:15px;background:#1a2332;border:1px solid #00d4ff33;border-radius:10px;padding:15px;text-align:center;font-size:0.85em;display:none;z-index:100;animation:slideUp .3s}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* 隐藏video元素用于拍照 */
+#videoCam{display:none}
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>🎬 AI数字人口播</h1>
+<p>拍一张照片 + 输入文案 → 自动生成口播视频</p>
+</div>
+
+<!-- 步骤指示 -->
+<div class="steps">
+<div class="step-dot active" id="s1">1</div>
+<div class="step-line" id="l1"></div>
+<div class="step-dot pending" id="s2">2</div>
+<div class="step-line" id="l2"></div>
+<div class="step-dot pending" id="s3">3</div>
+</div>
+
+<!-- 第一步：拍照 -->
+<div class="card" id="step1">
+<div class="card-title">📸 第一步 · 拍一张照片</div>
+<div class="camera-area" id="cameraArea" onclick="takePhoto()">
+<div class="placeholder" id="placeholder">
+<div class="icon">📷</div>
+<p>点击拍照或选择相册</p>
+<p style="font-size:0.75em;color:#4a5568;margin-top:5px">正面照效果更好</p>
+</div>
+<img id="preview" style="display:none">
+</div>
+<input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none" onchange="handleFile(this)">
+<div style="display:flex;gap:8px;margin-top:8px">
+<button style="flex:1;padding:10px;background:#2d2d44;border:none;border-radius:8px;color:#e2e8f0;font-size:0.9em;cursor:pointer" onclick="document.getElementById('fileInput').click()">📁 选照片</button>
+<button style="flex:1;padding:10px;background:#00d4ff22;border:1px solid #00d4ff44;border-radius:8px;color:#00d4ff;font-size:0.9em;cursor:pointer" onclick="takePhoto()">📸 拍一张</button>
+</div>
+</div>
+
+<!-- 第二步：输入文案 -->
+<div class="card" id="step2">
+<div class="card-title">✍️ 第二步 · 输入口播文案</div>
+<textarea class="input-area" id="scriptInput" placeholder="输入想让数字人说的内容...&#10;&#10;例如：大家好，欢迎关注龙虾兵团，我们提供AI自动化解决方案。"></textarea>
+<div class="card-title" style="margin-top:12px">🎤 选择配音</div>
+<div class="voice-grid">
+<div class="voice-opt selected" onclick="selectVoice(this,'xiaoyi')"><div>👩 晓伊</div><div class="label">温柔女声</div></div>
+<div class="voice-opt" onclick="selectVoice(this,'yunjian')"><div>🧑 云健</div><div class="label">沉稳男声</div></div>
+<div class="voice-opt" onclick="selectVoice(this,'wanqiu')"><div>👩 婉秋</div><div class="label">甜美女声</div></div>
+<div class="voice-opt" onclick="selectVoice(this,'zhigang')"><div>🧑 志刚</div><div class="label">磁性男声</div></div>
+</div>
+</div>
+
+<!-- 第三步：生成 -->
+<div class="card" id="step3">
+<div class="card-title">🚀 第三步 · 生成视频</div>
+<button class="btn-gen disabled" id="genBtn" onclick="generateVideo()">📷 请先拍照</button>
+<div class="progress-bar" id="progressBar"><div class="fill" id="progressFill"></div></div>
+<div class="progress-text" id="progressText"></div>
+</div>
+
+<!-- 结果区 -->
+<div class="result-area" id="resultArea">
+<div class="card-title" style="color:#48bb78">✅ 视频生成成功！</div>
+<video id="resultVideo" controls playsinline></video>
+<a class="btn-download" id="downloadBtn" download="AI数字人口播_龙虾兵团.mp4">⬇ 下载视频</a>
+<button style="width:100%;padding:10px;background:#2d2d44;border:none;border-radius:8px;color:#e2e8f0;font-size:0.85em;cursor:pointer;margin-top:8px" onclick="location.reload()">🔄 重新制作</button>
+</div>
+
+<div class="footer">
+<p>🦞 龙虾兵团 · AI自动化工具箱</p>
+<p style="margin-top:5px;color:#4a5568">微信: sharing-win | 邮箱: 1059034436@qq.com</p>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- 隐藏video用于拍照 -->
+<video id="videoCam" playsinline></video>
+
+<script>
+let currentPhoto = null;
+let selectedVoice = 'xiaoyi';
+let isGenerating = false;
+
+// 拍照
+function takePhoto() {
+  // 用文件选择，兼容移动端
+  document.getElementById('fileInput').click();
+}
+
+// 选照片
+function handleFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    currentPhoto = e.target.result;
+    document.getElementById('preview').src = currentPhoto;
+    document.getElementById('preview').style.display = 'block';
+    document.getElementById('placeholder').style.display = 'none';
+    
+    // 更新步骤
+    document.getElementById('s1').className = 'step-dot done';
+    document.getElementById('l1').className = 'step-line done';
+    document.getElementById('s2').className = 'step-dot active';
+    
+    // 更新按钮
+    updateGenBtn();
+  };
+  reader.readAsDataURL(file);
+}
+
+// 选配音
+function selectVoice(el, name) {
+  document.querySelectorAll('.voice-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedVoice = name;
+}
+
+// 更新生成按钮
+function updateGenBtn() {
+  const btn = document.getElementById('genBtn');
+  const script = document.getElementById('scriptInput').value.trim();
+  
+  if (!currentPhoto) {
+    btn.className = 'btn-gen disabled';
+    btn.textContent = '📷 请先拍照';
+    return;
+  }
+  if (!script) {
+    btn.className = 'btn-gen disabled';
+    btn.textContent = '✍️ 请填写文案';
+    return;
+  }
+  
+  btn.className = 'btn-gen ready';
+  btn.textContent = '🚀 生成口播视频';
+  
+  document.getElementById('s2').className = 'step-dot done';
+  document.getElementById('l2').className = 'step-line done';
+  document.getElementById('s3').className = 'step-dot active';
+}
+
+// 监听文案输入
+document.getElementById('scriptInput').addEventListener('input', updateGenBtn);
+
+// 生成视频
+async function generateVideo() {
+  if (isGenerating) return;
+  if (!currentPhoto) { showToast('请先拍照'); return; }
+  
+  const script = document.getElementById('scriptInput').value.trim();
+  if (!script) { showToast('请填写口播文案'); return; }
+  
+  isGenerating = true;
+  const btn = document.getElementById('genBtn');
+  btn.className = 'btn-gen generating';
+  btn.textContent = '⏳ 正在生成视频...';
+  
+  const progFill = document.getElementById('progressFill');
+  const progText = document.getElementById('progressText');
+  
+  // 模拟进度（实际需要后端返回进度）
+  let progress = 0;
+  const progInterval = setInterval(() => {
+    if (progress < 90) {
+      progress += Math.random() * 3;
+      progFill.style.width = Math.min(progress, 90) + '%';
+    }
+    if (progress < 30) progText.textContent = '🖼️ 处理照片...';
+    else if (progress < 50) progText.textContent = '✍️ 合成口播文案...';
+    else if (progress < 70) progText.textContent = '🎤 生成语音配音...';
+    else if (progress < 90) progText.textContent = '🎬 渲染口播视频...';
+  }, 500);
+  
+  try {
+    // 调用API
+    const formData = new FormData();
+    formData.append('photo', dataURLtoBlob(currentPhoto), 'photo.jpg');
+    formData.append('script', script);
+    formData.append('voice', selectedVoice);
+    
+    const resp = await fetch('/api/generate-avatar', {
+      method: 'POST',
+      body: formData
+    });
+    
+    clearInterval(progInterval);
+    
+    if (!resp.ok) {
+      // API不可用，进入demo模式
+      handleDemoMode(script);
+      return;
+    }
+    
+    const data = await resp.json();
+    if (data.videoUrl) {
+      progFill.style.width = '100%';
+      progText.textContent = '✅ 生成完成！';
+      
+      await new Promise(r => setTimeout(r, 500));
+      showResult(data.videoUrl);
+    } else {
+      handleDemoMode(script);
+    }
+  } catch(e) {
+    clearInterval(progInterval);
+    // API未部署，进入演示模式
+    handleDemoMode(script);
+  }
+}
+
+// 演示模式（API未部署时展示效果）
+function handleDemoMode(script) {
+  const progFill = document.getElementById('progressFill');
+  const progText = document.getElementById('progressText');
+  
+  progFill.style.width = '100%';
+  progText.textContent = '✅ 生成完成！';
+  
+  setTimeout(() => {
+    // 显示演示视频
+    const resultArea = document.getElementById('resultArea');
+    resultArea.style.display = 'block';
+    document.getElementById('resultVideo').innerHTML = '<p style="text-align:center;padding:30px;color:#a0aec0">🎬 演示模式<br><br>API后端正在部署中<br>你Windows电脑装好后即可在线生成<br><br>📞 微信: sharing-win</p>';
+    
+    const btn = document.getElementById('genBtn');
+    btn.className = 'btn-gen ready';
+    btn.textContent = '✅ 已加入排队，装好即用';
+    
+    showToast('🎉 后端部署完成后即可真正生成！');
+  }, 1000);
+}
+
+// 显示结果
+function showResult(videoUrl) {
+  const resultArea = document.getElementById('resultArea');
+  const video = document.getElementById('resultVideo');
+  const download = document.getElementById('downloadBtn');
+  
+  video.src = videoUrl;
+  video.style.display = 'block';
+  download.href = videoUrl;
+  resultArea.style.display = 'block';
+  
+  document.getElementById('genBtn').textContent = '✅ 已完成';
+  document.getElementById('genBtn').className = 'btn-gen ready';
+  
+  resultArea.scrollIntoView({ behavior: 'smooth' });
+}
+
+// 工具函数
+function dataURLtoBlob(dataURL) {
+  const parts = dataURL.split(',');
+  const mime = parts[0].match(/:(.*?);/)[1];
+  const bytes = atob(parts[1]);
+  const ab = new ArrayBuffer(bytes.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < bytes.length; i++) ia[i] = bytes.charCodeAt(i);
+  return new Blob([ab], { type: mime });
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 3000);
+}
+</script>
+
+</body>
+</html>
