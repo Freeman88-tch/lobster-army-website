@@ -1,117 +1,40 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数字人口播 - 在线生成 · 龙虾兵团</title>
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-        .av-header{text-align:center;padding:40px 20px;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);border-radius:16px;margin-bottom:30px}
-        .av-header h1{font-size:2em;margin-bottom:10px;color:#00d4ff}
-        .av-header p{color:#a0aec0;font-size:1.1em}
-        .av-card{background:#fff;border-radius:12px;padding:30px;margin-bottom:20px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
-        .av-card h3{margin-bottom:15px;color:#1a1a2e}
-        .tool-grid{display:grid;grid-template-columns:1fr;gap:20px}
-        .tool{border:2px solid #e2e8f0;border-radius:10px;padding:25px;transition:all .3s;cursor:pointer}
-        .tool:hover{border-color:#00d4ff;box-shadow:0 4px 20px rgba(0,212,255,0.15)}
-        .tool h4{color:#1a1a2e;font-size:1.2em;margin-bottom:8px}
-        .tool p{color:#666;font-size:.95em;margin-bottom:10px;line-height:1.6}
-        .tag{display:inline-block;padding:3px 12px;border-radius:20px;font-size:.8em;margin-right:5px;margin-bottom:8px;font-weight:600}
-        .tag-free{background:#c6f6d5;color:#22543d}
-        .tag-hot{background:#fed7d7;color:#9b2c2c}.tag-super{background:#feebc8;color:#7b341e}
-        .tag-new{background:#bee3f8;color:#2a4365}
-        .btn-go{display:inline-block;padding:10px 28px;background:linear-gradient(135deg,#00d4ff,#0099cc);color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:1em;border:none;margin-top:8px}
-        .btn-go:hover{transform:translateY(-2px);box-shadow:0 4px 15px rgba(0,212,255,0.3)}
-        .step-box{background:#f0fff4;border-left:4px solid #48bb78;padding:18px;margin:12px 0;border-radius:0 10px 10px 0}
-        .step-num{display:inline-block;background:#48bb78;color:#fff;width:26px;height:26px;text-align:center;line-height:26px;border-radius:50%;font-size:.85em;font-weight:700;margin-right:12px}
-        pre{background:#1a1a2e;color:#00d4ff;padding:18px;border-radius:10px;overflow-x:auto;font-size:.85em;line-height:1.5}
-        .tip-card{background:#fffbeb;border:1px solid #f6c23e;border-radius:10px;padding:15px;margin:15px 0}
-        .tip-card strong{color:#92400e}
-        .contact-card{text-align:center;padding:30px;background:linear-gradient(135deg,#f0e6ff,#e6f0ff);border-radius:12px;margin-top:20px}
-        .contact-card h3{color:#553c9a;margin-bottom:10px}
-        .contact-card p{font-size:1.1em;color:#44337a}
-    </style>
-</head>
-<body>
-    <nav class="navbar"><div class="container nav-inner">
-        <a href="index.html" class="logo">🦞 龙虾兵团</a>
-        <button class="menu-toggle" id="menuToggle">☰</button>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html#skills">技能广场</a></li>
-            <li><a href="index.html#download">免费下载</a></li>
-            <li><a href="index.html#pricing">套餐</a></li>
-            <li><a href="digital-human.html" style="color:#00d4ff;font-weight:700;">🎬 数字人口播</a></li>
-        </ul>
-    </div></nav>
+<html><head><meta charset="UTF-8"><title>数字人口播</title></head>
+<body style="font-family:sans-serif;padding:20px;background:#f0f4f8">
+<h1>🎬 AI数字人口播 · 在线生成</h1>
+<p>上传照片+文案→自动生成口播视频→在线下载</p>
 
-    <div class="container" style="margin-top:100px;">
-        <div class="av-header">
-            <h1>🎬 AI数字人口播 · 在线生成</h1>
-            <p>上传照片+文案→自动生成口播视频→在线下载</p>
-        </div>
+<div style="background:#fff;border-radius:10px;padding:20px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
+  <h3>📋 三步操作</h3>
+  <p><b>1.</b> 选工具 → <b>2.</b> 上传照片+音频 → <b>3.</b> 下载视频</p>
+</div>
 
-        <div class="tip-card">
-            <strong>💡 提示：</strong> 点击下方按钮会跳转到对应工具的在线页面，直接上传照片和音频即可生成数字人视频，生成后自动可下载。
-        </div>
+<div style="background:#fff;border-radius:10px;padding:20px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
+  <h3>🎭 SadTalker</h3>
+  <p>照片+录音=说话数字人，最经典开源方案</p>
+  <a href="https://huggingface.co/spaces/vinth/SadTalker" style="display:inline-block;padding:10px 20px;background:#00d4ff;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold">🚀 打开SadTalker</a>
+</div>
 
-        <div class="av-card">
-            <h3>📋 三步操作</h3>
-            <div class="step-box"><span class="step-num">1</span><strong>选工具</strong> — 下面4款选一个适合你的</div>
-            <div class="step-box"><span class="step-num">2</span><strong>上传</strong> — 一张人物照片 + 音频或文案</div>
-            <div class="step-box"><span class="step-num">3</span><strong>下载</strong> — 自动生成口播视频，直接保存</div>
-        </div>
+<div style="background:#fff;border-radius:10px;padding:20px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
+  <h3>🧠 daVinci-MagiHuman</h3>
+  <p>15B参数模型，中/英/日/韩/德/法多语言，效果震撼</p>
+  <a href="https://huggingface.co/spaces/SII-GAIR/daVinci-MagiHuman" style="display:inline-block;padding:10px 20px;background:#00d4ff;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold">🚀 打开daVinci</a>
+</div>
 
-        <div class="tool-grid">
-            <div class="tool" onclick="window.location.href='https://huggingface.co/spaces/vinth/SadTalker'">
-                <div><span class="tag tag-free">免费</span><span class="tag tag-hot">🔥 推荐</span><span class="tag tag-super">简单好用</span></div>
-                <h4>🎭 SadTalker — 照片说话视频</h4>
-                <p>一张照片 + 一段录音 = 会说话的数字人。<br>最经典的开源方案，上传图片和音频即可在线生成。</p>
-                <button class="btn-go">🚀 打开SadTalker在线生成</button>
-            </div>
+<div style="background:#fff;border-radius:10px;padding:20px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
+  <h3>♾️ InfiniteTalk</h3>
+  <p>单图+音频=不限时长口播视频，口型+表情+身体同步</p>
+  <a href="https://huggingface.co/MeiGen-AI/InfiniteTalk" style="display:inline-block;padding:10px 20px;background:#00d4ff;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold">🚀 打开InfiniteTalk</a>
+</div>
 
-            <div class="tool" onclick="window.location.href='https://huggingface.co/spaces/SII-GAIR/daVinci-MagiHuman'">
-                <div><span class="tag tag-free">免费</span><span class="tag tag-new">🌟 重磅</span></div>
-                <h4>🧠 daVinci-MagiHuman — 高质量口播视频</h4>
-                <p>15B参数大模型，支持中/英/日/韩/德/法多语言。<br>上传照片+音频，5秒视频仅2秒生成，效果震撼。</p>
-                <button class="btn-go">🚀 打开daVinci在线生成</button>
-            </div>
+<div style="background:#fff;border-radius:10px;padding:20px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
+  <h3>🎨 LongCat 1.5（美团）</h3>
+  <p>3D超写实数字人，15倍加速，普通显卡可跑</p>
+  <a href="https://github.com/meituan-longcat/LongCat-Video" style="display:inline-block;padding:10px 20px;background:#00d4ff;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold">🚀 打开LongCat</a>
+</div>
 
-            <div class="tool" onclick="window.location.href='https://huggingface.co/MeiGen-AI/InfiniteTalk'">
-                <div><span class="tag tag-free">免费</span><span class="tag tag-new">🆕 无限时长</span></div>
-                <h4>♾️ InfiniteTalk — 无限时长数字人</h4>
-                <p>单张图片+音频→不限时长口播视频。<br>口型同步+头部运动+表情+身体姿态，支持ComfyUI集成。</p>
-                <button class="btn-go">🚀 打开InfiniteTalk</button>
-            </div>
-
-            <div class="tool" onclick="window.location.href='https://github.com/meituan-longcat/LongCat-Video'">
-                <div><span class="tag tag-free">免费</span><span class="tag tag-hot">🔥 美团出品</span></div>
-                <h4>🎨 LongCat 1.5 — 3D超写实数字人</h4>
-                <p>美团最新3D皮肤+类肤质毛发+自然唇动。<br>15倍推理加速，普通显卡可跑。</p>
-                <button class="btn-go">🚀 打开LongCat GitHub</button>
-            </div>
-        </div>
-
-        <div class="av-card" style="margin-top:25px">
-            <h3>💻 本地安装（效果更好，需NVIDIA显卡）</h3>
-            <pre># SadTalker
-git clone https://github.com/OpenTalker/SadTalker.git
-cd SadTalker
-pip install -r requirements.txt
-python inference.py --driven_audio audio.wav --source_image photo.jpg
-
-# daVinci-MagiHuman / InfiniteTalk / LongCat
-# 见对应GitHub仓库README文档</pre>
-        </div>
-
-        <div class="contact-card">
-            <h3>🔧 需要定制数字人方案？</h3>
-            <p>📞 微信: sharing-win<br>📧 邮箱: 1059034436@qq.com</p>
-            <p style="margin-top:10px;color:#666;font-size:.9em">帮你搭建本地环境、定制形象、批量生产</p>
-        </div>
-    </div>
-
-    <footer style="text-align:center;padding:30px;color:#a0aec0;margin-top:50px;font-size:.85em">
-        <p>🦞 龙虾兵团 · AI自动化工具箱 | 数字人口播在线版</p>
-    </footer>
-</body>
-</html>
+<div style="text-align:center;padding:20px;margin-top:30px;background:#f0e6ff;border-radius:10px">
+  <h3>🔧 需要定制？</h3>
+  <p>微信: sharing-win | 邮箱: 1059034436@qq.com</p>
+</div>
+</body></html>
