@@ -25,17 +25,16 @@ textarea:focus{border-color:#00d4ff}
 #genBtn.disabled{background:#2d2d44;color:#555;cursor:not-allowed}
 #genBtn.busy{background:linear-gradient(135deg,#48bb78,#38a169);color:#fff}
 #status{text-align:center;color:#a0aec0;font-size:0.85em;padding:8px 0;min-height:30px}
-.analysis{background:#1a2332;border:1px solid #00d4ff22;border-radius:10px;padding:15px;margin:10px 0;font-size:0.88em;color:#cbd5e0;line-height:1.6;white-space:pre-wrap;display:none}
-.result{display:none;margin-top:15px;padding:20px;background:#1a2332;border:1px solid #48bb7844;border-radius:12px;text-align:center}
-.result .title{color:#48bb78;font-size:1.1em;font-weight:600;margin-bottom:12px}
-.result .content{background:#0a0a1a;border-radius:8px;padding:15px;text-align:left;font-size:0.85em;color:#cbd5e0;line-height:1.6;white-space:pre-wrap;margin-bottom:12px}
-.dl-btn{display:inline-block;padding:14px 30px;background:linear-gradient(135deg,#48bb78,#38a169);color:#fff;border-radius:10px;font-size:1em;font-weight:700;text-decoration:none;margin:5px;box-shadow:0 4px 15px #48bb7833}
-.reset-btn{display:inline-block;padding:12px 25px;background:#2d2d44;color:#a0aec0;border:none;border-radius:8px;font-size:0.9em;cursor:pointer;margin-top:10px}
 .steps{display:flex;gap:8px;margin:15px 0;padding:10px;background:#0a0a1a;border-radius:10px}
 .step{flex:1;text-align:center;padding:6px 4px;border-radius:8px;font-size:0.7em;color:#4a5568}
 .step.active{color:#00d4ff;background:#00d4ff11}
 .step.done{color:#48bb78;background:#48bb7811}
 .step .num{display:block;font-size:1.3em;font-weight:700;margin-bottom:2px}
+.result{display:none;margin-top:15px;padding:20px;background:#1a2332;border:1px solid #48bb7844;border-radius:12px;text-align:center}
+.result .title{color:#48bb78;font-size:1.1em;font-weight:600;margin-bottom:12px}
+.result .content{background:#0a0a1a;border-radius:8px;padding:15px;text-align:left;font-size:0.85em;color:#cbd5e0;line-height:1.6;white-space:pre-wrap;margin-bottom:12px}
+.dl-btn{display:inline-block;padding:14px 30px;background:linear-gradient(135deg,#48bb78,#38a169);color:#fff;border-radius:10px;font-size:1em;font-weight:700;text-decoration:none;margin:5px;box-shadow:0 4px 15px #48bb7833}
+.reset-btn{display:inline-block;padding:12px 25px;background:#2d2d44;color:#a0aec0;border:none;border-radius:8px;font-size:0.9em;cursor:pointer;margin-top:10px}
 .footer{text-align:center;padding:25px;color:#4a5568;font-size:0.75em}
 </style>
 </head>
@@ -70,12 +69,11 @@ textarea:focus{border-color:#00d4ff}
 <h3>🚀 生成</h3>
 <div class="steps">
 <div class="step" id="st1"><span class="num">1</span>上传</div>
-<div class="step" id="st2"><span class="num">2</span>AI分析</div>
+<div class="step" id="st2"><span class="num">2</span>分析</div>
 <div class="step" id="st3"><span class="num">3</span>完成</div>
 </div>
 <button id="genBtn" class="disabled">📷 请先上传照片</button>
 <div id="status"></div>
-<div class="analysis" id="analysis"></div>
 <div class="result" id="result">
 <div class="title">✅ 分析完成</div>
 <div class="content" id="resultContent"></div>
@@ -91,111 +89,185 @@ textarea:focus{border-color:#00d4ff}
 <input type="file" id="f2" accept="image/*" capture="environment" style="display:none">
 
 <script>
-var photo=null;
+var photoData = null;
+var compressedPhoto = null;
+
 document.getElementById('btnAlbum').onclick=function(e){e.stopPropagation();document.getElementById('f1').click()};
 document.getElementById('btnCamera').onclick=function(e){e.stopPropagation();document.getElementById('f2').click()};
 document.getElementById('upArea').onclick=function(){document.getElementById('f1').click()};
-document.getElementById('f1').onchange=function(){load(this)};
-document.getElementById('f2').onchange=function(){load(this)};
-document.getElementById('scriptText').oninput=check;
 
-function load(inp){
-  var f=inp.files[0];if(!f)return;
-  var r=new FileReader();
-  r.onload=function(e){
-    photo=e.target.result;
-    document.getElementById('preview').src=photo;
-    document.getElementById('preview').style.display='block';
-    document.getElementById('empty').style.display='none';
-    document.getElementById('st1').className='step done';
-    document.getElementById('st2').className='step active';
+function handleFile(file) {
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    photoData = e.target.result;
+    document.getElementById('preview').src = photoData;
+    document.getElementById('preview').style.display = 'block';
+    document.getElementById('empty').style.display = 'none';
+    document.getElementById('st1').className = 'step done';
+    document.getElementById('st2').className = 'step active';
     check();
+    
+    // 压缩图片到200KB以内
+    compressImage(photoData, 200, function(compressed) {
+      compressedPhoto = compressed;
+    });
   };
-  r.readAsDataURL(f);
+  reader.readAsDataURL(file);
+}
+
+document.getElementById('f1').onchange = function() { handleFile(this.files[0]); };
+document.getElementById('f2').onchange = function() { handleFile(this.files[0]); };
+
+function compressImage(dataUrl, maxSizeKB, callback) {
+  var img = new Image();
+  img.onload = function() {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    
+    // 限制最大宽度
+    var maxW = 800;
+    var scale = 1;
+    if (img.width > maxW) scale = maxW / img.width;
+    canvas.width = img.width * scale;
+    canvas.height = img.height * scale;
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    
+    // 尝试压缩
+    var quality = 0.7;
+    var compressed = canvas.toDataURL('image/jpeg', quality);
+    
+    // 如果还是太大，降低质量
+    while (compressed.length > maxSizeKB * 1024 && quality > 0.1) {
+      quality -= 0.1;
+      compressed = canvas.toDataURL('image/jpeg', quality);
+    }
+    
+    callback(compressed);
+  };
+  img.src = dataUrl;
 }
 
 document.querySelectorAll('.voice-btn').forEach(function(b){
-  b.onclick=function(){
+  b.onclick = function() {
     document.querySelectorAll('.voice-btn').forEach(function(x){x.className='voice-btn'});
-    this.className='voice-btn on';
+    this.className = 'voice-btn on';
   }
 });
 
-function check(){
-  var btn=document.getElementById('genBtn');
-  var s=document.getElementById('scriptText').value.trim();
-  if(photo&&s){btn.className='btn ready';btn.textContent='🚀 AI分析 + 生成'}
-  else if(!photo){btn.className='btn disabled';btn.textContent='📷 请先上传照片'}
-  else{btn.className='btn disabled';btn.textContent='✍️ 请填写文案'}
+function check() {
+  var btn = document.getElementById('genBtn');
+  var s = document.getElementById('scriptText').value.trim();
+  if (photoData && s) { btn.className = 'btn ready'; btn.textContent = '🚀 AI分析 + 生成'; }
+  else if (!photoData) { btn.className = 'btn disabled'; btn.textContent = '📷 请先上传照片'; }
+  else { btn.className = 'btn disabled'; btn.textContent = '✍️ 请填写文案'; }
 }
 
-function getVoice(){
-  var a=document.querySelectorAll('.voice-btn');
-  for(var i=0;i<a.length;i++)if(a[i].className=='voice-btn on')return a[i].textContent.trim();
+function getVoice() {
+  var a = document.querySelectorAll('.voice-btn');
+  for (var i = 0; i < a.length; i++) if (a[i].className == 'voice-btn on') return a[i].textContent.trim();
   return '晓伊';
 }
 
-document.getElementById('genBtn').onclick=function(){
-  var btn=document.getElementById('genBtn');
-  if(btn.className.indexOf('ready')===-1)return;
+document.getElementById('genBtn').onclick = function() {
+  var btn = document.getElementById('genBtn');
+  if (btn.className.indexOf('ready') === -1) return;
   
-  var status=document.getElementById('status');
-  var analysis=document.getElementById('analysis');
-  var result=document.getElementById('result');
-  analysis.style.display='none';result.style.display='none';
+  var status = document.getElementById('status');
+  var result = document.getElementById('result');
+  result.style.display = 'none';
   
-  status.textContent='🔍 AI正在分析照片...';
-  btn.className='btn busy';btn.textContent='🔍 分析中...';
-  document.getElementById('st2').className='step active';
+  status.textContent = '🔍 AI正在分析照片特征...';
+  btn.className = 'btn busy'; btn.textContent = '🔍 分析中...';
+  document.getElementById('st2').className = 'step active';
   
-  var x=new XMLHttpRequest();
-  x.open('POST','https://openclaw-d0gah5lgw9c80fc43-1300723188.ap-shanghai.app.tcloudbase.com/ai-avatar/ai-avatar-api',true);
-  x.setRequestHeader('Content-Type','application/json');
+  var imgToSend = compressedPhoto || photoData;
   
-  x.onload=function(){
-    try{
-      var d=JSON.parse(x.responseText);
-      if(d.success){
-        analysis.textContent=d.analysis;
-        analysis.style.display='block';
-        
-        status.textContent='✅ 分析完成！';
-        btn.className='btn ready';btn.textContent='✅ 已完成';
-        document.getElementById('st2').className='step done';
-        document.getElementById('st3').className='step active';
-        
-        // 显示结果区
-        var content=document.getElementById('resultContent');
-        content.textContent=d.analysis;
-        result.style.display='block';
-        analysis.style.display='none';
-        
-        // 绑定下载按钮
-        var dl=document.getElementById('dlBtn');
-        var txt='🦞 龙虾兵团 AI数字人口播工坊\n\n=== AI照片分析报告 ===\n\n'+d.analysis+'\n\n---\n生成时间: '+new Date().toLocaleString()+'\n微信: sharing-win';
-        var blob=new Blob([txt],{type:'text/plain;charset=utf-8'});
-        dl.href=URL.createObjectURL(blob);
-        
-        result.scrollIntoView({behavior:'smooth'});
+  // 先试服务器nginx代理(HTTP)
+  var x = new XMLHttpRequest();
+  x.open('POST', 'http://110.40.180.150:8081/ai-api/api/analyze-photo', true);
+  x.setRequestHeader('Content-Type', 'application/json');
+  x.timeout = 25000;
+  
+  x.onload = function() {
+    try {
+      var d = JSON.parse(x.responseText);
+      if (d.success && d.analysis) {
+        showResult(d.analysis);
         return;
       }
-    }catch(e){}
-    status.textContent='⚠️ 分析异常';btn.className='btn ready';btn.textContent='🔄 重试';
+    } catch(e) {}
+    // 失败就试CloudBase云函数
+    tryCloudBase(imgToSend);
   };
   
-  x.onerror=function(){
-    status.textContent='⚠️ 连接失败，请确保电脑已启动 python server.py';
-    btn.className='btn ready';btn.textContent='🔄 重试';
+  x.onerror = function() {
+    // HTTP失败，试CloudBase HTTPS
+    tryCloudBase(imgToSend);
   };
   
-  x.send(JSON.stringify({photo:photo,script:document.getElementById('scriptText').value.trim(),voice:getVoice()}));
+  x.send(JSON.stringify({
+    photo: imgToSend,
+    script: document.getElementById('scriptText').value.trim(),
+    voice: getVoice()
+  }));
   
-  setTimeout(function(){
-    if(btn.className.indexOf('busy')>-1){
-      status.textContent='⏱️ 请求超时，请检查电脑后端是否运行';
-      btn.className='btn ready';btn.textContent='🔄 重试';
+  // 20秒超时
+  setTimeout(function() {
+    if (btn.className.indexOf('busy') > -1) {
+      status.textContent = '⚠️ 连接超时，请重试';
+      btn.className = 'btn ready'; btn.textContent = '🔄 重试';
     }
-  },20000);
+  }, 25000);
 };
+
+function tryCloudBase(photo) {
+  var x2 = new XMLHttpRequest();
+  x2.open('POST', 'https://openclaw-d0gah5lgw9c80fc43-1300723188.ap-shanghai.app.tcloudbase.com/ai-avatar', true);
+  x2.setRequestHeader('Content-Type', 'application/json');
+  x2.timeout = 25000;
+  
+  x2.onload = function() {
+    try {
+      var d = JSON.parse(x2.responseText);
+      if (d.success && d.analysis) { showResult(d.analysis); return; }
+      if (d.error) showResult('分析出错: ' + d.error);
+    } catch(e) {
+      showResult('无法连接到分析服务');
+    }
+  };
+  
+  x2.onerror = function() {
+    showResult('网络连接失败，请检查网络');
+  };
+  
+  x2.send(JSON.stringify({
+    photo: photo,
+    script: document.getElementById('scriptText').value.trim(),
+    voice: getVoice()
+  }));
+}
+
+function showResult(analysisText) {
+  var status = document.getElementById('status');
+  var btn = document.getElementById('genBtn');
+  var result = document.getElementById('result');
+  
+  status.textContent = '✅ 分析完成！';
+  btn.className = 'btn ready'; btn.textContent = '✅ 已完成';
+  document.getElementById('st2').className = 'step done';
+  document.getElementById('st3').className = 'step active';
+  
+  document.getElementById('resultContent').textContent = analysisText;
+  result.style.display = 'block';
+  
+  // 绑定下载按钮
+  var dl = document.getElementById('dlBtn');
+  var txt = '🦞 龙虾兵团 AI数字人口播工坊\n\n=== AI照片分析报告 ===\n\n' + analysisText + '\n\n---\n生成时间: ' + new Date().toLocaleString() + '\n微信: sharing-win';
+  var blob = new Blob([txt], {type: 'text/plain;charset=utf-8'});
+  dl.href = URL.createObjectURL(blob);
+  
+  result.scrollIntoView({behavior: 'smooth'});
+}
 </script>
 </body></html>
