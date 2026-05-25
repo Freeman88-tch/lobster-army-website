@@ -1,40 +1,120 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>数字人口播</title></head>
-<body style="font-family:sans-serif;padding:20px;background:#f0f4f8">
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>数字人口播 · 龙虾兵团</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f0f1a;color:#e2e8f0;padding:0 15px 30px}
+.header{text-align:center;padding:40px 20px 25px}
+.header h1{font-size:1.6em;color:#00d4ff;margin-bottom:8px}
+.header p{color:#a0aec0;font-size:0.95em}
+.tip{background:#1a2332;border:1px solid #00d4ff33;border-radius:10px;padding:15px;margin:10px 0;font-size:0.88em;color:#a0aec0;line-height:1.5}
+.tip strong{color:#00d4ff}
+.card{background:#1a1a2e;border-radius:12px;padding:20px;margin:12px 0;border:1px solid #2d2d44}
+.card h3{color:#00d4ff;font-size:1.1em;margin-bottom:8px}
+.card p{color:#a0aec0;font-size:0.88em;line-height:1.5;margin-bottom:10px}
+.card .tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:0.75em;margin-bottom:8px;font-weight:600}
+.tag-free{background:#22543d20;color:#68d391;border:1px solid #68d39144}
+.tag-hot{background:#9b2c2c20;color:#fc8181;border:1px solid #fc818144}
+.tag-new{background:#2a436520;color:#63b3ed;border:1px solid #63b3ed44}
+.btn{display:block;width:100%;padding:12px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.95em;text-align:center;border:none;cursor:pointer;transition:all .2s}
+.btn-primary{background:linear-gradient(135deg,#00d4ff,#0099cc);color:#fff}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px #00d4ff44}
+.btn-secondary{background:#2d2d44;color:#e2e8f0}
+.btn-secondary:hover{background:#3d3d55}
+.btn:not(:last-child){margin-bottom:10px}
+.step{background:#1a2332;border-left:3px solid #48bb78;padding:12px;margin:8px 0;border-radius:0 8px 8px 0;font-size:0.88em}
+.step span{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:#48bb78;color:#fff;border-radius:50%;font-size:0.75em;font-weight:700;margin-right:10px;flex-shrink:0}
+.footer{text-align:center;padding:25px;color:#4a5568;font-size:0.8em;margin-top:30px}
+.contact{text-align:center;padding:20px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px;margin:15px 0}
+.contact h3{color:#b794f4;margin-bottom:10px}
+.contact p{color:#a0aec0;font-size:0.9em}
+.tools-list{display:flex;flex-direction:column;gap:10px}
+.tools-list a{display:flex;align-items:center;padding:12px 15px;background:#2d2d44;border-radius:8px;text-decoration:none;color:#e2e8f0;font-size:0.88em;transition:all .2s}
+.tools-list a:hover{background:#3d3d55;border-left:3px solid #00d4ff}
+.tools-list a .arrow{margin-left:auto;color:#00d4ff}
+</style>
+</head>
+<body>
+
+<div class="header">
 <h1>🎬 AI数字人口播 · 在线生成</h1>
-<p>上传照片+文案→自动生成口播视频→在线下载</p>
-
-<div style="background:#fff;border-radius:10px;padding:20px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
-  <h3>📋 三步操作</h3>
-  <p><b>1.</b> 选工具 → <b>2.</b> 上传照片+音频 → <b>3.</b> 下载视频</p>
+<p>上传照片+文案 → 自动生成口播视频 → 在线下载</p>
 </div>
 
-<div style="background:#fff;border-radius:10px;padding:20px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
-  <h3>🎭 SadTalker</h3>
-  <p>照片+录音=说话数字人，最经典开源方案</p>
-  <a href="https://huggingface.co/spaces/vinth/SadTalker" style="display:inline-block;padding:10px 20px;background:#00d4ff;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold">🚀 打开SadTalker</a>
+<div class="tip">
+<strong>⚠️ 注意：</strong>HuggingFace在国内部分地区无法直接访问。下面提供多个方案，选一个能打开的即可。
 </div>
 
-<div style="background:#fff;border-radius:10px;padding:20px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
-  <h3>🧠 daVinci-MagiHuman</h3>
-  <p>15B参数模型，中/英/日/韩/德/法多语言，效果震撼</p>
-  <a href="https://huggingface.co/spaces/SII-GAIR/daVinci-MagiHuman" style="display:inline-block;padding:10px 20px;background:#00d4ff;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold">🚀 打开daVinci</a>
+<div class="card">
+<h3>📋 三步操作</h3>
+<div class="step"><span>1</span><strong>选工具</strong> — 下面任一工具，免费使用</div>
+<div class="step"><span>2</span><strong>上传</strong> — 一张人物照片 + 音频/文案</div>
+<div class="step"><span>3</span><strong>下载</strong> — 自动生成口播视频，保存到手机</div>
 </div>
 
-<div style="background:#fff;border-radius:10px;padding:20px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
-  <h3>♾️ InfiniteTalk</h3>
-  <p>单图+音频=不限时长口播视频，口型+表情+身体同步</p>
-  <a href="https://huggingface.co/MeiGen-AI/InfiniteTalk" style="display:inline-block;padding:10px 20px;background:#00d4ff;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold">🚀 打开InfiniteTalk</a>
+<!-- 方案一：国内可直接访问的 -->
+<div class="card">
+<div><span class="tag tag-hot">🔥 国内直连</span><span class="tag tag-free">免费试用</span></div>
+<h3>🎭 D-ID — 在线数字人（国内可访问）</h3>
+<p>上传一张照片，输入文案，几秒生成会说话的数字人视频。免费额度够用，可直接下载。</p>
+<a href="https://studio.d-id.com" target="_blank" class="btn btn-primary">🚀 打开D-ID在线生成</a>
 </div>
 
-<div style="background:#fff;border-radius:10px;padding:20px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1)">
-  <h3>🎨 LongCat 1.5（美团）</h3>
-  <p>3D超写实数字人，15倍加速，普通显卡可跑</p>
-  <a href="https://github.com/meituan-longcat/LongCat-Video" style="display:inline-block;padding:10px 20px;background:#00d4ff;color:#fff;border-radius:8px;text-decoration:none;font-weight:bold">🚀 打开LongCat</a>
+<!-- 方案二：ModelScope国内镜像 -->
+<div class="card">
+<div><span class="tag tag-free">免费</span><span class="tag tag-new">🆕 国内镜像</span></div>
+<h3>🧠 ModelScope 数字人模型</h3>
+<p>阿里开源的AI模型平台，国内直接访问。搜索"数字人""SadTalker"等，可以在线体验推理。</p>
+<a href="https://modelscope.cn/search?q=%E6%95%B0%E5%AD%97%E4%BA%BA" target="_blank" class="btn btn-secondary">🔍 打开ModelScope搜索</a>
 </div>
 
-<div style="text-align:center;padding:20px;margin-top:30px;background:#f0e6ff;border-radius:10px">
-  <h3>🔧 需要定制？</h3>
-  <p>微信: sharing-win | 邮箱: 1059034436@qq.com</p>
+<!-- 方案三：百度智能云 -->
+<div class="card">
+<div><span class="tag tag-free">免费</span><span class="tag tag-hot">🔥</span></div>
+<h3>☁️ 百度智能云 · 数字人平台</h3>
+<p>百度官方数字人平台，支持形象定制+口播生成，国内秒开。</p>
+<a href="https://console.bce.baidu.com/ai/#/ai/face/digital-human/overview" target="_blank" class="btn btn-secondary">☁️ 打开百度数字人</a>
 </div>
-</body></html>
+
+<!-- 方案四：腾讯云 -->
+<div class="card">
+<div><span class="tag tag-free">免费</span><span class="tag tag-new">🆕</span></div>
+<h3>☁️ 腾讯云 · 数字人视频制作</h3>
+<p>腾讯云数字人平台，上传形象+剧本，自动生成口播视频。</p>
+<a href="https://console.cloud.tencent.com/vod/generate/digital-human" target="_blank" class="btn btn-secondary">☁️ 打开腾讯云数字人</a>
+</div>
+
+<!-- 备用：HuggingFace链接 -->
+<div class="card">
+<h3>🌐 备用方案（需要网络工具）</h3>
+<p>如果你能访问国际网络，以下免费工具效果更好：</p>
+<div class="tools-list">
+<a href="https://huggingface.co/spaces/vinth/SadTalker" target="_blank">🎭 SadTalker（照片说话视频）<span class="arrow">→</span></a>
+<a href="https://huggingface.co/spaces/SII-GAIR/daVinci-MagiHuman" target="_blank">🧠 daVinci-MagiHuman（高质量口播）<span class="arrow">→</span></a>
+<a href="https://huggingface.co/MeiGen-AI/InfiniteTalk" target="_blank">♾️ InfiniteTalk（无限时长）<span class="arrow">→</span></a>
+<a href="https://github.com/meituan-longcat/LongCat-Video" target="_blank">🎨 LongCat 1.5（美团3D数字人）<span class="arrow">→</span></a>
+</div>
+</div>
+
+<div class="card">
+<h3>💻 本地安装（效果好，需显卡）</h3>
+<div class="tools-list">
+<a href="https://github.com/OpenTalker/SadTalker" target="_blank">📥 下载SadTalker本地版<span class="arrow">→</span></a>
+<a href="https://huggingface.co/GAIR/daVinci-MagiHuman" target="_blank">📥 下载daVinci模型<span class="arrow">→</span></a>
+<a href="https://github.com/meituan-longcat/LongCat-Video" target="_blank">📥 下载LongCat本地版<span class="arrow">→</span></a>
+</div>
+</div>
+
+<div class="contact">
+<h3>🔧 需要定制数字人方案？</h3>
+<p>微信: sharing-win<br>邮箱: 1059034436@qq.com</p>
+<p style="color:#718096;font-size:0.85em;margin-top:8px">帮你搭建本地环境、定制形象、批量生产</p>
+</div>
+
+<div class="footer">
+<p>🦞 龙虾兵团 · AI自动化工具箱</p>
+<p style="margin-top:5px"><a href="index.html" style="color:#00d4ff;text-decoration:none">← 返回首页</a></p>
+</div>
+
+</body>
+</html>
