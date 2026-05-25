@@ -86,7 +86,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <!-- 第一步：拍照 -->
 <div class="card" id="step1">
 <div class="card-title">📸 第一步 · 拍一张照片</div>
-<div class="camera-area" id="cameraArea" onclick="takePhoto()">
+<div class="camera-area" id="cameraArea" onclick="document.getElementById('fileInput').click()">
 <div class="placeholder" id="placeholder">
 <div class="icon">📷</div>
 <p>点击拍照或选择相册</p>
@@ -97,7 +97,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none" onchange="handleFile(this)">
 <div style="display:flex;gap:8px;margin-top:8px">
 <button style="flex:1;padding:10px;background:#2d2d44;border:none;border-radius:8px;color:#e2e8f0;font-size:0.9em;cursor:pointer" onclick="document.getElementById('fileInput').click()">📁 选照片</button>
-<button style="flex:1;padding:10px;background:#00d4ff22;border:1px solid #00d4ff44;border-radius:8px;color:#00d4ff;font-size:0.9em;cursor:pointer" onclick="takePhoto()">📸 拍一张</button>
+<button style="flex:1;padding:10px;background:#00d4ff22;border:1px solid #00d4ff44;border-radius:8px;color:#00d4ff;font-size:0.9em;cursor:pointer" onclick="document.getElementById('cameraInput').click()">📸 拍一张</button>
 </div>
 </div>
 
@@ -139,20 +139,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="toast" id="toast"></div>
 
 <!-- 隐藏video用于拍照 -->
-<video id="videoCam" playsinline></video>
 
 <script>
 let currentPhoto = null;
 let selectedVoice = 'xiaoyi';
 let isGenerating = false;
 
-// 拍照
-function takePhoto() {
-  // 用文件选择，兼容移动端
-  document.getElementById('fileInput').click();
-}
-
-// 选照片
 function handleFile(input) {
   const file = input.files[0];
   if (!file) return;
