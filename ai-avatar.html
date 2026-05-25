@@ -140,26 +140,90 @@ function generate() {
   if (btn.className.indexOf('ok') === -1 && btn.className.indexOf('busy') === -1) return;
   
   var status = document.getElementById('status');
-  status.textContent = '⏳ 正在生成...';
-  btn.className = 'btn busy';
-  btn.textContent = '⏳ 生成中...';
+  var result = document.getElementById('result');
+  result.style.display = 'none';
   
-  // 演示模式 - 因为我们后端还没部署
+  status.textContent = '🔍 正在识别照片...';
+  btn.className = 'btn busy';
+  btn.textContent = '🔍 识别中...';
+  
+  // 调服务器豆包API进行图片识别
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'http://110.40.180.150:3456/api/analyze-photo', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try {
+        var data = JSON.parse(xhr.responseText);
+        if (data.success) {
+          // 识别成功，显示分析结果
+          status.textContent = '✅ 照片识别完成';
+          btn.textContent = '✅ 识别完成';
+          
+          result.style.display = 'block';
+          result.innerHTML = '<p>📸 <b>照片分析结果</b></p>'
+            + '<div class="demo-note" style="text-align:left">'
+            + '<p style="color:#e2e8f0;white-space:pre-wrap">' + escapeHtml(data.analysis) + '</p>'
+            + '</div>'
+            + '<button onclick="location.reload()" style="margin-top:10px;padding:10px 20px;background:#2d2d44;border:none;border-radius:8px;color:#e2e8f0;cursor:pointer">🔄 重新上传</button>';
+          
+          btn.className = 'btn ok';
+          return;
+        }
+      } catch(e) {}
+    }
+    // API未就绪，进入演示模式
+    demoMode();
+  };
+  
+  xhr.onerror = function() {
+    demoMode();
+  };
+  
+  // 发送照片到服务器
+  xhr.send(JSON.stringify({ photo: photoData, script: document.getElementById('scriptText').value.trim(), voice: getSelectedVoice() }));
+  
+  // 超时10秒没返回也进演示模式
   setTimeout(function() {
-    status.textContent = '';
-    btn.className = 'btn ok';
-    btn.textContent = '✅ 已提交';
-    
-    var result = document.getElementById('result');
-    result.style.display = 'block';
-    result.innerHTML = '<p>🎉 请求已提交！</p>'
-      + '<div class="demo-note">'
-      + '🎬 <b>演示模式</b><br><br>'
-      + '后端数字人服务正在部署中...<br>'
-      + '你Windows电脑到位后即可真正在线生成<br><br>'
-      + '📞 微信: sharing-win'
-      + '</div>';
-  }, 1500);
+    if (btn.className.indexOf('busy') > -1) {
+      xhr.abort();
+      demoMode();
+    }
+  }, 10000);
+}
+
+function demoMode() {
+  var btn = document.getElementById('genBtn');
+  var status = document.getElementById('status');
+  var result = document.getElementById('result');
+  
+  status.textContent = '';
+  btn.className = 'btn ok';
+  btn.textContent = '✅ 已提交';
+  
+  result.style.display = 'block';
+  result.innerHTML = '<p>🎉 请求已提交！</p>'
+    + '<div class="demo-note">'
+    + '🎬 <b>演示模式</b><br><br>'
+    + '豆包API图片识别引擎正在部署中...<br>'
+    + '你Windows电脑到位后即可真正在线识别+生成<br><br>'
+    + '📞 微信: sharing-win'
+    + '</div>';
+}
+
+function getSelectedVoice() {
+  var btns = document.querySelectorAll('.voice-row button');
+  for (var i = 0; i < btns.length; i++) {
+    if (btns[i].className === 'on') return btns[i].textContent.trim();
+  }
+  return '晓伊·温柔';
+}
+
+function escapeHtml(text) {
+  var d = document.createElement('div');
+  d.textContent = text;
+  return d.innerHTML;
 }
 </script>
 </body>
