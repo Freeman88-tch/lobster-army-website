@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>测试上传</title>
+</head>
+<body style="padding:20px;font-family:sans-serif;background:#f0f4f8">
+<h2>📸 照片上传测试</h2>
+<p>点击下面按钮测试：</p>
+<p id="status" style="color:#666;font-size:0.9em">未选择</p>
+
+<button onclick="document.getElementById('f1').click()" style="padding:12px 24px;background:#00d4ff;border:none;border-radius:8px;color:#fff;font-size:1em;margin:5px;cursor:pointer">📁 选照片（无capture）</button>
+<button onclick="document.getElementById('f2').click()" style="padding:12px 24px;background:#48bb78;border:none;border-radius:8px;color:#fff;font-size:1em;margin:5px;cursor:pointer">📸 拍照（有capture）</button>
+
+<div id="preview" style="margin-top:15px;max-width:300px"></div>
+
+<input type="file" id="f1" accept="image/*" style="display:none" onchange="show(this)">
+<input type="file" id="f2" accept="image/*" capture="environment" style="display:none" onchange="show(this)">
+
+<script>
+function show(input) {
+  var f = input.files[0];
+  if (!f) { document.getElementById('status').textContent = '未选择'; return; }
+  document.getElementById('status').textContent = '已选: ' + f.name + ' (' + (f.size/1024).toFixed(0) + 'KB)';
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById('preview').innerHTML = '<img src="' + e.target.result + '" style="max-width:100%;border-radius:8px">';
+  };
+  reader.readAsDataURL(f);
+}
+</script>
+</body></html>
