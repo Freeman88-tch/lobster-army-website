@@ -149,7 +149,7 @@ function generate() {
   
   // 调服务器豆包API进行图片识别
   var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'http://192.168.1.7:5000/api/analyze-photo', true);
+  xhr.open('POST', 'http://110.40.180.150:3456/api/analyze-photo', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
   
   xhr.onload = function() {
